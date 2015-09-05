@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,8 +49,8 @@ public class AddActivity extends AppCompatActivity {
         //未检测intent是否为空,此处id无数据时为null
         id=intent.getStringExtra("id");
 //        Log.e("szg",id);
-        Log.e("AddActivity","OnCreate");
-        if (!id.equals("")){
+        Log.e("AddActivity", "OnCreate");
+        if (!TextUtils.isEmpty(id)){
             Cursor cursor=db.query(SECRETBOOK_TABLE, null, "id=?", new String[]{id}, null, null, null);
             if (cursor.moveToFirst()){
                 String site=cursor.getString(cursor.getColumnIndex("site"));
@@ -69,7 +70,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String site = siteEdit.getText().toString().trim();
-                if (site.equals("")) {
+                if (TextUtils.isEmpty(site)) {
                     Toast.makeText(AddActivity.this, R.string.sitename + "必须填写", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -80,7 +81,7 @@ public class AddActivity extends AppCompatActivity {
                 values.put("note", noteEdit.getText().toString());
 
                 //如果id为空，则是新增数据
-                if (id==null || id.equals("")){
+                if (id==null || TextUtils.isEmpty(id)){
                     values.put("deleteFlag", 0);
                     db.insert(SECRETBOOK_TABLE, null, values);
                 }else{
